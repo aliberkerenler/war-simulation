@@ -1,60 +1,34 @@
-#SAVAŞ SİMÜLASYONU: İNSAN İMPARATORLUĞU VE ORK LEJYONU (C)#
+# SAVAŞ SİMÜLASYONU: İNSAN İMPARATORLUĞU VE ORK LEJYONU
 
-📝 Proje Tanımı
-Bu proje, İnsan İmparatorluğu ve Ork Lejyonu arasındaki epik bir savaşı simüle eden bir C dilinde yazılmış uygulamadır. Simülasyon, birliklerin temel istatistiklerini, kahramanların bonuslarını, canavarların etkilerini ve araştırma seviyelerinin geliştirmelerini dinamik olarak hesaba katar. Savaş, Raylib kütüphanesi ile görselleştirilmiş bir 20x20 ızgarada adım adım ilerler ve tüm süreç detaylıca bir metin dosyasına kaydedilir.
+## 🎯 Proje Amacı
+Bu proje, iki ırkın (**İnsan İmparatorluğu** ve **Ork Lejyonu**) savaşını simüle etmek için C dilinde geliştirilmiş bir uygulamadır. Simülasyon, birliklerin temel istatistiklerine, özel kahraman/canavar bonuslarına ve teknolojik araştırma seviyelerine dayanan kapsamlı savaş mekaniklerini içerir. Savaşın durumu bir ızgarada görselleştirilir ve tüm adımlar loglanır.
 
-🛠️ Teknolojiler ve Kütüphaneler
-Dil: C
+## 🛠️ Teknolojiler ve Kütüphaneler
+* **Dil:** C
+* **Görselleştirme:** [raylib](https://www.raylib.com) (20x20 ızgarada görselleştirme için)
+* **Dinamik Veri Yükleme:** [curl](https://curl.se) (Senaryo JSON dosyalarını URL'den indirmek için)
+* **Veri Formatı:** JSON (Birlik tipleri, kahramanlar, canavarlar, araştırmalar ve senaryolar için)
 
-Görselleştirme: raylib (Grafik ve 20x20 ızgara çizimi için)
+## ✨ Temel Özellikler ve Mekanikler
 
-Dinamik Veri Yükleme: curl (Senaryo JSON dosyalarını URL'den indirmek için)
+### 📊 Veri ve Senaryo Yönetimi
+* **Statik Veri Okuma:** Birliklerin temel güçleri, kahramanlar, canavarlar ve araştırma seviyeleri gibi veriler ilgili JSON dosyalarından (`unit_types.json`, `heroes.json`, `creatures.json`, `research.json`) okunur ve C dilindeki `struct` yapılarına manuel olarak ayrıştırılır.
+* **Dinamik Senaryo Yükleme:** Kullanıcıdan alınan 1-10 arası bir numara ile URL'den senaryo JSON dosyası indirilir ve birliklerin başlangıç sayıları bu dosyadan sağlanır.
+* **Bonuslar:** Kahramanlar, canavarlar ve araştırma seviyeleri, birimlerin saldırı, savunma ve kritik şans değerlerini etkiler.
 
-Veri Formatı: JSON (Birlik tipleri, kahramanlar, canavarlar, araştırmalar ve senaryolar için)
+### ⚔️ Savaş Hesaplamaları
+* **Saldırı ve Savunma Gücü:** Birlik başına saldiri/savunma gücü ile birlik sayısının çarpımı ile hesaplanır.
+* **Net Hasar:** Rakibin toplam saldırı gücünden, savunan birliğin toplam savunma gücü çıkarılarak hesaplanır.
+* **Kritik Vuruş:** Kritik vuruş şansı oranına göre kritik vuruş yapıldığında hasar **1.5 kat** artırılır.
+* **Yorgunluk Mekanizması:** Her 5 turda bir, tüm birliklerin saldırı ve savunma güçleri **%10** oranında azalır.
+* **Birlik Kayıpları:** Bir birliğin birim başına sağlık durumu sıfıra ulaştığında, o birlik tamamen yok olmuş sayılır.
 
-✨ Temel Özellikler ve Mekanikler
-Birlik ve Geliştirme Yönetimi
-Statik Veri Okuma: Birliklerin temel saldırı/savunma/sağlık/kritik şans değerleri ve kahraman/canavar/araştırma detayları JSON dosyalarından (unit_types.json, heroes.json, creatures.json, research.json) manuel olarak ayrıştırılarak belleğe alınır.
+### 🖥️ Görselleştirme ve Çıktı
+* **Raylib Görselleştirme:** Savaş öncesi ve sonrası durumlar $20\times20$ boyutunda bir ızgarada gösterilir. Birliklerin sağlıkları renkli barlarla yansıtılır (Yeşil: %100-%50, Sarı: %50-%20, Kırmızı: %20 ve altı).
+* **Detaylı Loglama:** Savaşın her adımı, saldırı/savunma güçlerinin katkıları, verilen net hasarlar ve kalan birim/sağlık bilgileri ile birlikte **`savas_sim.txt`** dosyasına detaylı olarak yazdırılır.
 
-Dinamik Senaryo Yükleme: Kullanıcıdan alınan 1-10 arası bir numara ile ilgili URL'den senaryo JSON dosyası indirilir ve birliklerin başlangıç sayıları buradan alınır.
-
-Bonus Hesaplamaları: Kahramanlar, canavarlar ve araştırma seviyeleri, ilgili birimlere saldırı, savunma ve kritik şans bonusları ekler.
-
-Savaş Mekanikleri
-Saldırı ve Savunma Hesaplaması:
-
-Saldırı Gücü = Birlik Başına Saldırı Gücü × Birlik Sayısı
-
-Savunma Gücü = Birlik Başına Savunma Gücü × Birlik Sayısı
-
-Net Hasar Hesaplaması: Net Hasar = Saldırı Gücü × (1 - (Karşı Birliğin Savunma Gücü / Kendi Saldırı Gücü))
-
-Kritik Vuruş: Kritik şans oranına göre kritik vuruş yapıldığında hasar 1.5 kat artar.
-
-Sağlık ve Birlik Yok Olması: Birliğin sağlığı (birim başına) net hasara orantılı olarak azaltılır. Sağlığı sıfırın altına düşen birimler savaş dışı kalır.
-
-Yorgunluk Mekanizması: Her 5 turda bir, tüm birliklerin saldırı ve savunma güçleri %10 oranında azalır.
-
-Görselleştirme ve Çıktı
-Görsel Simülasyon: Savaş öncesi ve sonrası durumlar 20x20'lik bir ızgarada görselleştirilir. Her hücrede maksimum 100 birim bulunur.
-
-Sağlık Durumu Görseli: Birliklerin sağlık durumları renkli barlarla gösterilir:
-
-Yeşil: %50 ve üzeri Sağlık
-
-Sarı: %20 - %50 arası Sağlık
-
-Kırmızı: %20 ve altı Sağlık
-
-Detaylı Savaş Logu: Savaşın her adımı, hesaplanan saldırı/savunma güçleri, verilen net hasar ve kalan birim/sağlık bilgileri ile birlikte savas_sim.txt dosyasına detaylı olarak yazılır.
-
-🚀 Çalıştırma Talimatları
-Projeyi Raylib ve cURL kütüphanelerini içerecek şekilde derleyin.
-
-Uygulamayı çalıştırın.
-
-Komut satırında istenen 1 ile 10 arasında bir senaryo numarası girin.
-
-Simülasyon başlayacak ve Raylib penceresinde görselleştirme görüntülenecektir.
-
-Savaşı başlatmak için Raylib penceresi açıkken BOŞLUK (SPACE) tuşuna basın.
+## 🚀 Çalıştırma Talimatları
+1.  Projeyi gerekli kütüphaneler (`raylib`, `curl`) ile derleyin.
+2.  Uygulamayı çalıştırın.
+3.  Komut satırında istenen **1-10 arası bir senaryo numarası** girin.
+4.  Açılan Raylib penceresinde savaşı başlatmak için **BOŞLUK (SPACE)** tuşuna basın.
