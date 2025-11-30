@@ -1,4 +1,5 @@
-SAVAŞ SİMÜLASYONU: İNSAN İMPARATORLUĞU VE ORK LEJYONU (C)
+#SAVAŞ SİMÜLASYONU: İNSAN İMPARATORLUĞU VE ORK LEJYONU (C)#
+
 📝 Proje Tanımı
 Bu proje, İnsan İmparatorluğu ve Ork Lejyonu arasındaki epik bir savaşı simüle eden bir C dilinde yazılmış uygulamadır. Simülasyon, birliklerin temel istatistiklerini, kahramanların bonuslarını, canavarların etkilerini ve araştırma seviyelerinin geliştirmelerini dinamik olarak hesaba katar. Savaş, Raylib kütüphanesi ile görselleştirilmiş bir 20x20 ızgarada adım adım ilerler ve tüm süreç detaylıca bir metin dosyasına kaydedilir.
 
